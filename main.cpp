@@ -80,13 +80,8 @@ int main() {
 	/***********************
 	 * ASSEMBLY BUBBLESORT *
 	 ***********************/
-
 	cout << "Sorting via Assembly..................\n"
 		 << "Time: ??:??:??\n\n";
-
-
-
-
 
 	return 0;
 }
@@ -98,7 +93,6 @@ void swap(int *xp, int *yp)
     *yp = temp;
 }
 
-// An optimized version of Bubble Sort
 void bubbleSortCPP(vector<long>& arr, int n)
 {
    int i, j;
@@ -121,7 +115,6 @@ void bubbleSortCPP(vector<long>& arr, int n)
    }
 }
 
-/* Function to print an array */
 void outputToFile(vector<long>& arr, int size, string filename)
 {
 	ofstream oFile;
