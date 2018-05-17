@@ -21,6 +21,10 @@
 #include <fstream>
 using namespace std;
 
+extern "C" {
+	void bubbleSortASM(vector<long>&, int size);
+}
+
 void swap(int *xp, int *yp);
 void bubbleSortCPP(vector<long>& arr, int n);
 void outputToFile(vector<long>& arr, int size, string filename);
@@ -35,6 +39,7 @@ int main() {
 
 	//VECTOR VARIABLES
 	vector<long> randomNums;
+	vector<long> randomNumsASM;
 	float pushData;
 
 	//TIME VARIABLES
@@ -80,8 +85,32 @@ int main() {
 	/***********************
 	 * ASSEMBLY BUBBLESORT *
 	 ***********************/
-	cout << "Sorting via Assembly..................\n"
-		 << "Time: ??:??:??\n\n";
+
+	//read data into vector
+	ifile.open("masm5.dat", ios::binary);
+	if(!ifile.is_open()){
+		cout << "error: randoms numbers were not stored\n";
+		return 0;
+	}
+	while(ifile >> pushData){
+		randomNumsASM.push_back(pushData);
+	}
+
+	cout << "Sorting via Assembly..................\n";
+
+	startClock = clock();
+	bubbleSortASM((long *)&randomNums[0], randomNums.size());
+	endClock = clock();
+
+	//get time data
+	tempSecs = double(endClock-startClock)/CLOCKS_PER_SEC;
+	mins = ((int)tempSecs%3600)/60;
+	secs = ((int)tempSecs%60);
+	cout << "Time: " << mins << ':'<< secs << endl << endl;
+	ifile.close();
+
+	//store data into "SortedDataCPP.dat"
+	outputToFile(randomNumsASM, randomNumsASM.size(), outFileASM);
 
 	return 0;
 }
@@ -93,6 +122,7 @@ void swap(int *xp, int *yp)
     *yp = temp;
 }
 
+// An optimized version of Bubble Sort
 void bubbleSortCPP(vector<long>& arr, int n)
 {
    int i, j;
@@ -115,6 +145,7 @@ void bubbleSortCPP(vector<long>& arr, int n)
    }
 }
 
+/* Function to print an array */
 void outputToFile(vector<long>& arr, int size, string filename)
 {
 	ofstream oFile;
